@@ -1,0 +1,7 @@
+{
+  "name": "Saúde Fácil",
+  "description": "Um lembrete inteligente para remédios, consultas e exames que ajuda você a cuidar melhor da sua saúde, evitando esquecimentos e melhorando sua qualidade de vida.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
