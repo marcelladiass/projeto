@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { AuthProvider } from './contexts/AuthContext';
 import { useAuth } from './hooks/useAuth';
-// FIX: Corrected component import paths to align with the project structure and fix module resolution errors.
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
+import LoginPage from './components/LoginPage';
+import RegisterPage from './components/RegisterPage';
 import ReminderManager from './components/ReminderManager';
 
 const AppRouter: React.FC = () => {

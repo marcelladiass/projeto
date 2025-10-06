@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Reminder, ReminderType } from '../types';
 import ShareModal from './ShareModal';
 import { IconPill, IconStethoscope, IconMicroscope, IconShare, IconTrash, IconBell, IconPencil } from './Icons';
+import { formatDate } from '../utils/dateUtils';
 
 interface ReminderCardProps {
   reminder: Reminder;
@@ -32,11 +33,6 @@ const getBgColorForType = (type: ReminderType) => {
   }
 };
 
-const formatDate = (dateString?: string) => {
-    if (!dateString) return null;
-    const [year, month, day] = dateString.split('-');
-    return `${day}/${month}/${year}`;
-}
 
 const ReminderCard: React.FC<ReminderCardProps> = ({ reminder, onToggleComplete, onDelete, onEdit }) => {
     const [isShareModalOpen, setShareModalOpen] = useState(false);

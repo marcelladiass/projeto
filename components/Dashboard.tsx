@@ -2,6 +2,7 @@ import React from 'react';
 import { Reminder } from '../types';
 import ReminderCard from './ReminderCard';
 import { IconCalendar } from './Icons';
+import { getReminderDate } from '../utils/dateUtils';
 
 interface DashboardProps {
   reminders: Reminder[];
@@ -13,14 +14,6 @@ interface DashboardProps {
 const Dashboard: React.FC<DashboardProps> = ({ reminders, onToggleComplete, onDelete, onEdit }) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-
-  const getReminderDate = (reminder: Reminder) => {
-    if (reminder.date) {
-        const [year, month, day] = reminder.date.split('-').map(Number);
-        return new Date(year, month - 1, day);
-    }
-    return new Date(); // Treat reminders without a date as today's reminders
-  }
 
   const todayReminders = reminders
     .filter(r => {
