@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { AuthProvider } from './contexts/AuthContext';
+import { useAuth } from './hooks/useAuth';
+// FIX: Corrected component import paths to align with the project structure and fix module resolution errors.
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ReminderManager from './components/ReminderManager';
 
-const AppContent: React.FC = () => {
+const AppRouter: React.FC = () => {
     const { user } = useAuth();
     const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
 
@@ -23,7 +25,7 @@ const AppContent: React.FC = () => {
 const App: React.FC = () => {
   return (
     <AuthProvider>
-      <AppContent />
+      <AppRouter />
     </AuthProvider>
   );
 };

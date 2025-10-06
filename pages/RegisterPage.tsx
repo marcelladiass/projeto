@@ -1,5 +1,6 @@
 import React, { useState, FormEvent } from 'react';
-import { useAuth } from '../contexts/AuthContext';
+// FIX: Corrected the import path for the useAuth hook. It should be imported from '../hooks/useAuth'.
+import { useAuth } from '../hooks/useAuth';
 import { IconPill, IconLoader } from '../components/Icons';
 
 interface RegisterPageProps {

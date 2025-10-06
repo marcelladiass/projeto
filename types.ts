@@ -5,7 +5,7 @@ export interface User {
 
 export enum ReminderType {
   Medication = 'MEDICATION',
-  Appointment = 'APPOINTPOINTMENT',
+  Appointment = 'APPOINTMENT',
   Exam = 'EXAM',
 }
 
