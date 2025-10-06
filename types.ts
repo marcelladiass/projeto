@@ -1,6 +1,11 @@
+export interface User {
+  name: string;
+  email: string;
+}
+
 export enum ReminderType {
   Medication = 'MEDICATION',
-  Appointment = 'APPOINTMENT',
+  Appointment = 'APPOINTPOINTMENT',
   Exam = 'EXAM',
 }
 

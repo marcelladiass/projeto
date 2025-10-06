@@ -4,11 +4,11 @@ import { Reminder, ReminderType } from '../types';
 interface AddReminderModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onAdd: (reminder: Omit<Reminder, 'id' | 'isCompleted'>) => void;
+  onSave: (reminder: Omit<Reminder, 'isCompleted' | 'remainingQuantity'> & { id?: string }) => void;
   initialData?: Partial<Reminder> | null;
 }
 
-const AddReminderModal: React.FC<AddReminderModalProps> = ({ isOpen, onClose, onAdd, initialData }) => {
+const AddReminderModal: React.FC<AddReminderModalProps> = ({ isOpen, onClose, onSave, initialData }) => {
   const [type, setType] = useState<ReminderType>(ReminderType.Medication);
   const [title, setTitle] = useState('');
   const [time, setTime] = useState('08:00');
@@ -21,7 +21,7 @@ const AddReminderModal: React.FC<AddReminderModalProps> = ({ isOpen, onClose, on
       setType(initialData.type || ReminderType.Medication);
       setTitle(initialData.title || '');
       setTime(initialData.time || '08:00');
-      setDate(initialData.date || '');
+      setDate(initialData.date || new Date().toISOString().split('T')[0]);
       setDetails(initialData.details || '');
       setTotalQuantity(initialData.totalQuantity);
     } else {
@@ -39,26 +39,29 @@ const AddReminderModal: React.FC<AddReminderModalProps> = ({ isOpen, onClose, on
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const newReminder: Omit<Reminder, 'id' | 'isCompleted'> = {
+    const reminderData: Omit<Reminder, 'isCompleted' | 'remainingQuantity'> & { id?: string } = {
+        id: initialData?.id,
         type,
         title,
         time,
         details,
     };
+
     if (type !== ReminderType.Medication) {
-        newReminder.date = date;
+        reminderData.date = date;
     }
-    if (type === ReminderType.Medication && totalQuantity) {
-        newReminder.totalQuantity = totalQuantity;
-        newReminder.remainingQuantity = totalQuantity;
+
+    if (type === ReminderType.Medication) {
+        reminderData.totalQuantity = totalQuantity;
     }
-    onAdd(newReminder);
+    
+    onSave(reminderData as any);
   };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-40 flex justify-center items-center">
       <div className="bg-white rounded-lg shadow-2xl p-6 w-full max-w-md m-4 transform transition-all animate-fade-in-up">
-        <h2 className="text-2xl font-bold mb-4 text-gray-800">{initialData ? 'Editar Lembrete' : 'Novo Lembrete'}</h2>
+        <h2 className="text-2xl font-bold mb-4 text-gray-800">{initialData?.id ? 'Editar Lembrete' : 'Novo Lembrete'}</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-1">Tipo</label>
@@ -96,7 +99,7 @@ const AddReminderModal: React.FC<AddReminderModalProps> = ({ isOpen, onClose, on
           </div>
           <div className="flex justify-end space-x-3">
             <button type="button" onClick={onClose} className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors">Cancelar</button>
-            <button type="submit" className="px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition-colors shadow-sm">{initialData ? 'Salvar Alterações' : 'Adicionar Lembrete'}</button>
+            <button type="submit" className="px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition-colors shadow-sm">{initialData?.id ? 'Salvar Alterações' : 'Adicionar Lembrete'}</button>
           </div>
         </form>
       </div>

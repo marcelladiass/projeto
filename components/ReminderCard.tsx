@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Reminder, ReminderType } from '../types';
 import ShareModal from './ShareModal';
-import { IconPill, IconStethoscope, IconMicroscope, IconShare, IconTrash, IconBell } from './Icons';
+import { IconPill, IconStethoscope, IconMicroscope, IconShare, IconTrash, IconBell, IconPencil } from './Icons';
 
 interface ReminderCardProps {
   reminder: Reminder;
   onToggleComplete: (id: string) => void;
   onDelete: (id: string) => void;
+  onEdit: (reminder: Reminder) => void;
 }
 
 const getIconForType = (type: ReminderType) => {
@@ -37,7 +38,7 @@ const formatDate = (dateString?: string) => {
     return `${day}/${month}/${year}`;
 }
 
-const ReminderCard: React.FC<ReminderCardProps> = ({ reminder, onToggleComplete, onDelete }) => {
+const ReminderCard: React.FC<ReminderCardProps> = ({ reminder, onToggleComplete, onDelete, onEdit }) => {
     const [isShareModalOpen, setShareModalOpen] = useState(false);
     
     const isRefillNeeded = reminder.type === ReminderType.Medication && 
@@ -74,6 +75,9 @@ const ReminderCard: React.FC<ReminderCardProps> = ({ reminder, onToggleComplete,
                 {reminder.isCompleted ? 'Desmarcar' : 'Concluído'}
            </button>
            <div className="flex items-center space-x-2">
+            <button onClick={() => onEdit(reminder)} className="text-gray-400 hover:text-green-500 transition-colors">
+                <IconPencil className="h-5 w-5" />
+            </button>
             <button onClick={() => setShareModalOpen(true)} className="text-gray-400 hover:text-blue-500 transition-colors">
                 <IconShare className="h-5 w-5" />
             </button>

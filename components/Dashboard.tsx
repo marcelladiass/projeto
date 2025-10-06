@@ -7,9 +7,10 @@ interface DashboardProps {
   reminders: Reminder[];
   onToggleComplete: (id: string) => void;
   onDelete: (id: string) => void;
+  onEdit: (reminder: Reminder) => void;
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ reminders, onToggleComplete, onDelete }) => {
+const Dashboard: React.FC<DashboardProps> = ({ reminders, onToggleComplete, onDelete, onEdit }) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -50,7 +51,7 @@ const Dashboard: React.FC<DashboardProps> = ({ reminders, onToggleComplete, onDe
       {todayReminders.length > 0 ? (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {todayReminders.map(reminder => (
-            <ReminderCard key={reminder.id} reminder={reminder} onToggleComplete={onToggleComplete} onDelete={onDelete} />
+            <ReminderCard key={reminder.id} reminder={reminder} onToggleComplete={onToggleComplete} onDelete={onDelete} onEdit={onEdit} />
           ))}
         </div>
       ) : (
@@ -62,7 +63,7 @@ const Dashboard: React.FC<DashboardProps> = ({ reminders, onToggleComplete, onDe
             <h2 className="text-2xl font-bold text-gray-700 mt-8 mb-4">Próximos</h2>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {upcomingReminders.map(reminder => (
-                <ReminderCard key={reminder.id} reminder={reminder} onToggleComplete={onToggleComplete} onDelete={onDelete} />
+                <ReminderCard key={reminder.id} reminder={reminder} onToggleComplete={onToggleComplete} onDelete={onDelete} onEdit={onEdit} />
             ))}
             </div>
           </>
