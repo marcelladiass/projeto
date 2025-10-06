@@ -1,11 +1,26 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { ScannedMedication } from '../types';
 
-if (!process.env.API_KEY) {
-    console.warn("API_KEY environment variable not set. Gemini API calls will fail.");
-}
+// Inicializa como nulo para evitar que o app trave na inicialização
+// se a API_KEY não estiver configurada no ambiente de produção (Vercel).
+let ai: GoogleGenAI | null = null;
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+const getAiInstance = (): GoogleGenAI => {
+    // Se a instância já foi criada, a retorna.
+    if (ai) {
+        return ai;
+    }
+    
+    // Verifica se a variável de ambiente existe.
+    if (process.env.API_KEY) {
+        // Cria a instância apenas na primeira vez que for necessária.
+        ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+        return ai;
+    }
+    
+    // Se a chave não existir, lança um erro claro que pode ser tratado na UI.
+    throw new Error("A chave da API do Google Gemini não está configurada no ambiente.");
+};
 
 const parsePrescriptionPrompt = `
 You are an expert medical assistant. Your task is to accurately extract medication details from an image of a medical prescription.
@@ -21,6 +36,9 @@ Do not invent information. Only extract what is clearly visible.
 
 export const parsePrescription = async (base64Image: string): Promise<ScannedMedication[]> => {
   try {
+    // Obtém a instância da IA. Isso lançará um erro se a chave não estiver configurada.
+    const gemini = getAiInstance();
+
     const imagePart = {
       inlineData: {
         mimeType: 'image/jpeg',
@@ -69,8 +87,9 @@ export const parsePrescription = async (base64Image: string): Promise<ScannedMed
     }
     return [];
 
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error parsing prescription with Gemini:", error);
-    throw new Error("Não foi possível analisar a receita. Tente novamente com uma imagem mais nítida.");
+    // Propaga a mensagem de erro para ser exibida na interface do usuário.
+    throw new Error(error.message || "Não foi possível analisar a receita. Tente novamente com uma imagem mais nítida.");
   }
 };
