@@ -50,7 +50,7 @@ export const parsePrescription = async (base64Image: string): Promise<ScannedMed
         text: parsePrescriptionPrompt,
     };
 
-    const response = await ai.models.generateContent({
+    const response = await gemini.models.generateContent({
       model: "gemini-2.5-flash",
       contents: { parts: [imagePart, textPart] },
       config: {
